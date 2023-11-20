@@ -14,6 +14,7 @@ double calculator::exce(char end)
 		}
 		if (c == '(') {
 			calculator temp;
+			// 递归读取括号内的表达式
 			opr_Stack.push(temp.exce(')'));
 			continue;
 		}
@@ -47,9 +48,8 @@ double calculator::product(double Lopr, double Ropr, char opt)
 		return Lopr * Ropr;
 	case '/':
 		if (Ropr == 0) {
-			std::cout << "除数不能为0,请重新输入:";
-			std::cin >> Ropr;
-			return Lopr / Ropr;
+			std::cout << "除数不能为0!";
+			exit(1);
 		}
 		else return Lopr / Ropr;
 	}
@@ -73,7 +73,7 @@ bool calculator::is_pre(char opt1, char opt2)
 	return false;
 }
 
-char calculator::get_num()
+char calculator::get_num(bool neg)
 {
 	char ch;
 	int Icount = 0;
@@ -96,6 +96,10 @@ char calculator::get_num()
 			else Icount++;
 		}
 	}
+	if (ch == '-' && tem_S.size() == 0) {
+		// 处理负数
+		ch = get_num(true);
+	}
 	double decimal = 0;
 	while (Dcount--)
 	{
@@ -108,7 +112,17 @@ char calculator::get_num()
 		tem_S.pop();
 	}
 	if (is_numgot) {
-		opr_Stack.push(decimal + int_part);
+		if (neg) {
+			opr_Stack.push(0 - (decimal + int_part));
+		}
+		else {
+			opr_Stack.push(decimal + int_part);
+		}
+	}
+	if (!(ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '(' || ch == ')' || ch == '\n' || ch == ' ')) {
+		// 非法字符，退出程序
+		std::cout << "非法字符! " << std::endl;
+		exit(1);
 	}
 	return ch;
 }

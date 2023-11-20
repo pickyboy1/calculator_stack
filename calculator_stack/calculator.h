@@ -9,7 +9,7 @@ public:
 	double exce(char end);
 	double product(double Lopr, double Ropr, char opt);
 	bool is_pre(char opt1, char opt2);
-	char get_num();
+	char get_num(bool neg = false);
 private:
 	Stack<char> opt_Stack;
 	Stack<double> opr_Stack;
